@@ -1,5 +1,7 @@
 <style>
-
+html,body{
+  overflow: hidden;
+}
 </style>
 
 <style scoped>
@@ -7,7 +9,7 @@
 </style>
 
 <template>
-    <div>
+    <div style="height: 100%">
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -17,7 +19,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">Ice创客基地(前台)</a>
+            <a href="/" class="navbar-brand">Ice创客基地(前台</a>
           </div>
           <div class="navbar-collapse">
             <ul class="nav navbar-nav">
@@ -48,17 +50,17 @@
       <!--<a href="#" class="close" data-dismiss="alert">&times;</a>-->
       <!--</div>-->
       <!--</div>-->
-      <div id="container" style="margin-top: 50px">
+      <div id="container" style="margin-top: 50px; height:calc(100% - 50px);overflow-x: hidden; overflow-y: auto">
         <router-view></router-view>
+        <hr>
+        <footer>
+          <p>
+            <a href="#" target="_blank">
+              Caro  2017
+            </a>
+          </p>
+        </footer>
       </div>
-      <hr>
-      <footer>
-        <p>
-          <a href="#" target="_blank">
-            Caro  2017
-          </a>
-        </p>
-      </footer>
     </div>
 </template>
 

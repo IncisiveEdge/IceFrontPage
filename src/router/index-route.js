@@ -3,7 +3,7 @@ import Login from '../components/index/Login'
 import Register from '../components/index/Register'
 import Logout from '../components/index/Logout'
 import User from '../components/index/User'
-import Error from '../components/index/Error'
+import NotFound from '../404.vue'
 
 export default [
   {
@@ -28,7 +28,7 @@ export default [
     component: User
   }, {
     path: '*',
-    name: 'Error',
-    component: Error
+    name: 'pageNotFound',
+    component: NotFound
   }
 ]
