@@ -7,11 +7,11 @@
 </style>
 
 <template>
-    <div>login</div>
+    <div>reports</div>
 </template>
 
 <script>
   export default {
-    name: 'Login'
+    name: ''
   }
 </script>

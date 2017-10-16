@@ -7,11 +7,11 @@
 </style>
 
 <template>
-    <div>login</div>
+    <div>matchs</div>
 </template>
 
 <script>
   export default {
-    name: 'Login'
+    name: ''
   }
 </script>

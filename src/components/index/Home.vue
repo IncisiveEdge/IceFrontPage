@@ -111,11 +111,12 @@
       refresh () {
         const vm = this
         const defer = $.Deferred()
-        resta.get('/getPost').done(res => {
+        resta.get('/getPostAll').done(res => {
           vm.posts = res
+          console.log(res)
           defer.resolve()
         })
-        return defer
+        return defer.promise
       }
     },
     created () {

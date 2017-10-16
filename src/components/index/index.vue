@@ -17,7 +17,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">Ice</a>
+            <a href="/" class="navbar-brand">Ice创客基地(前台)</a>
           </div>
           <div class="navbar-collapse">
             <ul class="nav navbar-nav">

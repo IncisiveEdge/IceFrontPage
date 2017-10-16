@@ -7,11 +7,11 @@
 </style>
 
 <template>
-    <div>login</div>
+    <div>轮播图片</div>
 </template>
 
 <script>
   export default {
-    name: 'Login'
+    name: ''
   }
 </script>
