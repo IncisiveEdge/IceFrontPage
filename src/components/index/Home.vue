@@ -112,7 +112,7 @@
         const vm = this
         const defer = $.Deferred()
         resta.get('/getPostAll').done(res => {
-          vm.posts = res
+          vm.posts = res.body
           console.log(res)
           defer.resolve()
         })

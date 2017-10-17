@@ -43,10 +43,10 @@
 
   .login-panel{
     position: absolute;
-    top: -35%;
+    top: calc(50% - 350px);
     left: calc(50% - 200px);
     width: 400px;
-    height: 80%;
+    height: 400px;
     background-color: white;
     padding: 70px 20px;
     border-radius: 5px;
@@ -102,7 +102,7 @@
             <FormItem>
               <Button :disabled="loading" type="success" size="large" long @click="handleSubmit('formInline')">
                 <Icon v-if="loading" type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                登录
+                <span v-text="loginText"></span>
               </Button>
             </FormItem>
           </Form>
@@ -120,8 +120,8 @@
     data () {
       return {
         formInline: {
-          user: '',
-          password: ''
+          user: 'tuhanjiang',
+          password: '200810'
         },
         ruleInline: {
           user: [
@@ -133,7 +133,8 @@
           ]
         },
         remember: true,
-        loading: false
+        loading: false,
+        loginText: '登录'
       }
     },
 
@@ -142,8 +143,9 @@
         this.$refs[name].validate(valid => {
           if (valid) {
             this.loading = true
+            this.loginText = '正在登录'
             resta.post('/login', {username: this.formInline.user, password: this.formInline.password}, true).done(res => {
-              this.loading = false
+//              this.loading = false
               if (res.body) {
                 this.$Message.success('登录成功！即将跳转 ...')
                 setTimeout(() => {
@@ -154,10 +156,13 @@
 //                  window.location.href = adminPageUrl
 //                  window.open()
                   window.location.reload()
-                }, 3000)
+                }, 2000)
               } else {
                 this.$Message.error(res.header.message)
               }
+            }).fail(() => {
+              this.loading = false
+              this.loginText = '登录'
             })
           } else {
             this.$Message.error('表单验证失败!')

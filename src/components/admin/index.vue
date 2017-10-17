@@ -213,16 +213,16 @@
           </Breadcrumb>
         </div>
         <div style="position: absolute; right: 15px; top: 15px">
-          <Dropdown style="margin-left: 20px">
+          <Dropdown style="margin-left: 20px"  @on-click="logout">
             <Button type="primary">
               用户：{{user.name}}
               <Icon type="arrow-down-b"></Icon>
             </Button>
             <DropdownMenu slot="list">
-              <DropdownItem>查看</DropdownItem>
-              <DropdownItem>修改</DropdownItem>
-              <DropdownItem disabled>管理</DropdownItem>
-              <DropdownItem divided @on-click="logout">注销登录</DropdownItem>
+              <DropdownItem name="view">查看</DropdownItem>
+              <DropdownItem name="modify">修改</DropdownItem>
+              <DropdownItem name="" disabled>管理</DropdownItem>
+              <DropdownItem name="logout" divided>注销登录</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -342,8 +342,18 @@
       }
     },
     methods: {
-      logout (event) {
-        console.log(event)
+      logout (name) {
+        if (name === 'logout') {
+          resta.get('/logout').done((res) => {
+            if (res.body) {
+              this.$Message.success('用户已注销！请重新登录')
+              setTimeout(() => {
+                this.$router.push({path: '/login'})
+                window.location.reload()
+              }, 2000)
+            }
+          })
+        }
       },
       toggleClick () {
         if (this.spanLeft === 5) {
