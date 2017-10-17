@@ -16,6 +16,12 @@
     height: 100%;
   }
 
+  .ivu-menu-vertical .ivu-menu-item{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .layout-breadcrumb {
     padding: 0 15px;
   }
@@ -41,6 +47,7 @@
 
   .layout-menu-left {
     background: #464c5b;
+    overflow: auto;
   }
 
   .layout-header {
@@ -55,7 +62,9 @@
     width: 90%;
     height: 40px;
     line-height: 40px;
-    background: #5b6270;
+    /*background: #5b6270;*/
+    background-color: white;
+    color: #666;
     /*text-align: center;*/
     padding-left: 10px;
     border-radius: 3px;
@@ -63,6 +72,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: larger;
   }
 
   .layout-ceiling-main a {
@@ -170,16 +180,26 @@
   <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
     <Row type="flex">
       <Col :span="spanLeft" class="layout-menu-left">
-      <Menu active-name="1" theme="dark" width="auto"  @on-select="selectItem">
+      <Menu active-name="1" theme="dark" width="auto"  @on-select="selectItem" accordion>
         <div class="layout-logo-left">
-          <span style="color: rgb(45, 140, 240);font-size: larger">
-            Ice 创客基地管理系统
-          </span>
+          © Amarsoft
         </div>
         <MenuItem v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">
           <Icon :type="menuItem.icon" :size="iconSize"></Icon>
           <span class="layout-text" v-text="menuItem.name"></span>
         </MenuItem>
+        <!--<Submenu v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">-->
+          <!--<template slot="title">-->
+            <!--<Icon :type="menuItem.icon" :size="iconSize"></Icon>-->
+            <!--<span class="layout-text" v-text="menuItem.name"></span>-->
+          <!--</template>-->
+          <!--<MenuItem v-if="menuItem.children && menuItem.children.length" v-for="(subMenuItem, subIndex) in menuItem.children" :id="'menu-item-'+ menuItem.id + '-' +subMenuItem.id" :key="subIndex" :name="index + '-' +subIndex">-->
+            <!--<template>-->
+              <!--<Icon :type="subMenuItem.icon" :size="iconSize"></Icon>-->
+              <!--<span class="layout-text" v-text="subMenuItem.name"></span>-->
+            <!--</template>-->
+          <!--</MenuItem>-->
+        <!--</Submenu>-->
       </Menu>
       </Col>
       <Col :span="spanRight" style="height: 100%">
@@ -188,11 +208,23 @@
           <Icon type="navicon" size="32"></Icon>
         </Button>
         <div class="layout-breadcrumb">
-          <Breadcrumb>
-            <BreadcrumbItem href="#">首页</BreadcrumbItem>
-            <BreadcrumbItem href="#">应用中心</BreadcrumbItem>
-            <BreadcrumbItem>某应用</BreadcrumbItem>
+          <Breadcrumb  v-if="activeTabItem && activeTabItem.breadcrumbData">
+            <BreadcrumbItem href="#" v-for="(bcruItem, index) in activeTabItem.breadcrumbData" :key="index" v-text="bcruItem.name"></BreadcrumbItem>
           </Breadcrumb>
+        </div>
+        <div style="position: absolute; right: 15px; top: 15px">
+          <Dropdown style="margin-left: 20px">
+            <Button type="primary">
+              用户：{{user.name}}
+              <Icon type="arrow-down-b"></Icon>
+            </Button>
+            <DropdownMenu slot="list">
+              <DropdownItem>查看</DropdownItem>
+              <DropdownItem>修改</DropdownItem>
+              <DropdownItem disabled>管理</DropdownItem>
+              <DropdownItem divided @on-click="logout">注销登录</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
 
@@ -252,7 +284,7 @@
       </div>
 
       <div class="layout-copy">
-        2011-2017 &copy; Ice
+        2011-2017 &copy; Amarfot
       </div>
       </Col>
     </Row>
@@ -262,6 +294,7 @@
   import 'iview/dist/styles/iview.css'
   import $ from 'jquery'
   import navPageFactory from '../../assets/js/nav-controller'
+  import {resta} from '../../assets/rest'
   export default {
     name: 'AdminIndex',
     data () {
@@ -298,7 +331,9 @@
         tabsCollapse: [],
         tabsDataStack: [],
         tabContents: [],
-        width: {}
+        width: {},
+        activeTabItem: {},
+        user: {}
       }
     },
     computed: {
@@ -307,6 +342,9 @@
       }
     },
     methods: {
+      logout (event) {
+        console.log(event)
+      },
       toggleClick () {
         if (this.spanLeft === 5) {
           this.spanLeft = 2
@@ -320,27 +358,46 @@
         this['tab' + name] = false
       },
       selectItem (name) {
-        const menuItem = this.menuData[name]
-        this.selectMegaMenuItem(menuItem)
+        name += ''
+        const nameSplit = name.split('-')
+        let item = {children: this.menuData}
+        for (let i = 0; i < nameSplit.length; i++) {
+          if (item && item.children && item.children.length) {
+            item = item.children[Number(nameSplit[i])]
+          }
+        }
+        this.selectMegaMenuItem(item)
       },
       selectMegaMenuItem (menuItem, flag) {
         // 点击三级菜单项弹出四级菜单项
-        if (flag && menuItem.children && menuItem.children.length) {
-          menuItem.isCollapse = !menuItem.isCollapse
-//           改变isCollapse状态
-        }
-        if (!menuItem.children || !menuItem.children.length) {
-          this.openMenuInTabs(menuItem)
-//          $('.pulldown-menu').css('display', 'none')
+//        if (flag && menuItem.children && menuItem.children.length) {
+//          menuItem.isCollapse = !menuItem.isCollapse
+//        }
+//        if (!menuItem.children || !menuItem.children.length) {
+//          this.openMenuInTabs(menuItem)
+//        }
+        this.openMenuInTabs(menuItem)
+      },
+      searchItemByUrl (url, items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].url === url) {
+            return items[i]
+          }
         }
       }
     },
     created () {
+      resta.get('/getSessionUser').done((res) => {
+        if (res.body) {
+          this.user = res.body
+        }
+      })
       $.extend(this, navPageFactory)
       setTimeout(() => {
-        this.selectMegaMenuItem(this.menuData[0])
+        const tabItem = this.searchItemByUrl(this.$route.path, this.menuData)
+        tabItem && this.selectMegaMenuItem(tabItem)
+//        this.selectMegaMenuItem(this.menuData[0])
         this.mainMenuResize(this, this)
-
         $('.ivu-tabs-bar').css('margin-bottom', '0')
         $('.ivu-tabs-content').css({'height': 'calc(100% - 48px)', 'overflow-y': 'auto', 'overflow-x': 'hidden', 'padding': '10px'})
       })

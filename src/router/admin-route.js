@@ -11,9 +11,9 @@ import Reports from '../components/admin/reports'
 
 export default [
   {
-    path: '/admin/index',
-    name: 'adminDesktop',
-    component: Images
+    path: '/admin/',
+    name: 'adminDesktop'
+    // component: Desktop
   }, {
     path: '/admin/login',
     name: 'adminLogin',

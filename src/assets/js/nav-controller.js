@@ -1,30 +1,34 @@
 import $ from 'jquery'
+// import rax from './rax/rax.js'
+// import rax from './rax/rax'
 
 const rax = {
   url () {
   },
   block () {
+
   },
   unblock () {
+
   }
 }
 
 let NavPageUtil = function () {
   function mainMenuResize (scope, obj) {
     $(window).resize(function () {
-      scope.width.contWidth = $('#main-content').outerWidth()
-      if (scope.width.point + scope.width.contWidth >= scope.width.itemsWidth) {
-        scope.width.point = scope.width.itemsWidth - scope.width.contWidth
-        $('.layout-nav', $('#main-content')).css('left', -scope.width.point + 'px')
-        scope.rightActive = 0
-      } else {
-        scope.rightActive = 1
-      }
-      if (scope.width.point < 0) {
-        scope.width.point = 0
-        $('.layout-nav', $('#main-content')).css('left', scope.width.point + 'px')
-        scope.leftActive = 0
-      }
+      // scope.width.contWidth = $('#main-nav').outerWidth()
+      // if (scope.width.point + scope.width.contWidth >= scope.width.itemsWidth) {
+      //   scope.width.point = scope.width.itemsWidth - scope.width.contWidth
+      //   $('.layout-nav', $('#main-nav')).css('left', -scope.width.point + 'px')
+      //   scope.rightActive = 0
+      // } else {
+      //   scope.rightActive = 1
+      // }
+      // if (scope.width.point < 0) {
+      //   scope.width.point = 0
+      //   $('.layout-nav', $('#main-nav')).css('left', scope.width.point + 'px')
+      //   scope.leftActive = 0
+      // }
       // tab页标签宽度自适应
       obj.tabsAutoLayout()
     })
@@ -192,8 +196,7 @@ let NavPageUtil = function () {
         for (let i = 0; i < this.tabsData.length; i++) {
           if (this.tabsData[i].active) {
             currTab = this.tabsData[i]
-            // this.tabsData.splice(i, 1)
-            Array.prototype.splice.call(this.tabsData, i, 1)
+            this.tabsData.splice(i, 1)
             break
           }
         }
@@ -209,8 +212,7 @@ let NavPageUtil = function () {
         } else break
       }
 
-      // this.tabsData = sumData.splice(0, index)
-      this.tabsData = Array.prototype.splice.call(sumData, 0, index)
+      this.tabsData = sumData.splice(0, index)
       this.tabsData.push(currTab)
       this.tabsCollapse = sumData
     } else {
@@ -221,7 +223,6 @@ let NavPageUtil = function () {
           if (first.active) {
             first = this.tabsData[this.tabsData.length - 2]
             this.tabsData.splice(this.tabsData.length - 2, 1)
-            Array.prototype.splice.call(this.tabsData, this.tabsData.length - 2, 1)
           } else {
             first = this.tabsData.pop()
           }
@@ -270,10 +271,11 @@ let NavPageUtil = function () {
     this.currTabsWidth += newTab.width
   }
 
-  function findTabItem (id) {
-    for (let i = 0; i < this.tabsData.length; i++) {
-      if (this.tabsData[i].id === id) {
-        return this.tabsData[i]
+  function findTabItem (id, items) {
+    items = items || this.tabsData
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].id === id) {
+        return items[i]
       }
     }
   }
@@ -314,7 +316,11 @@ let NavPageUtil = function () {
       }
 
       tabItem.breadcrumbData = headerData
-
+      const collapseItem = this.findTabItem(tabId, this.tabsCollapse)
+      if (collapseItem) {
+        Array.prototype.splice.call(this.tabsCollapse, this.tabsCollapse.indexOf(collapseItem), 1)
+        Array.prototype.splice.call(this.tabsDataStack, this.tabsDataStack.indexOf(collapseItem), 1)
+      }
       this.tabsData.push(tabItem)
       this.tabsDataStack.push(tabItem)
     }
@@ -326,7 +332,6 @@ let NavPageUtil = function () {
     //
     //   this.tabContents.push(contentItem)
     // }
-
     this.selectTabItem(tabItem)
     // 当前tab数总宽度超过tab面板宽度时，隐藏tabsData中的若干tab到tabsCollapse中,达到自适应效果
     setTimeout(() => {
@@ -357,8 +362,7 @@ let NavPageUtil = function () {
   }
 
   function routeTo (menuItem, keepAlive) {
-    let path = menuItem.url
-    // let path = menuItem.url.replace('.jsp', '')
+    let path = menuItem.url.replace('.jsp', '')
     path.indexOf('/') === 0 && (path = path.substring(1))
     let index = path.indexOf('?')
     const query = parseQuery(path)
@@ -380,8 +384,7 @@ let NavPageUtil = function () {
     // console.log($scope.tabsCollapse.splice(findItemIndex($scope.tabsCollapse, menuItem),1)[0]);
     this.tabsCollapse.push(this.tabsData.shift())
 
-    // let currItem = this.tabsCollapse.splice(this.tabsCollapse.indexOf(menuItem), 1)[0]
-    let currItem = Array.prototype.splice.call(this.tabsCollapse, this.tabsCollapse.indexOf(menuItem), 1)[0]
+    let currItem = this.tabsCollapse.splice(this.tabsCollapse.indexOf(menuItem), 1)[0]
     this.tabsData.push(currItem)
     // tab容器宽度自适应
     this.tabReplaceWidthAutoAdapt(currItem)
@@ -494,10 +497,8 @@ let NavPageUtil = function () {
 
   function closeCollapseTabItem (tabItem, $event) {
     $event.stopPropagation()
-    // this.tabsCollapse.splice(this.tabsCollapse.indexOf(tabItem), 1)
-    Array.prototype.splice.call(this.tabsCollapse, this.tabsCollapse.indexOf(tabItem), 1)
-    // this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
-    Array.prototype.splice.call(this.tabsDataStack, this.tabsDataStack.indexOf(tabItem), 1)
+    this.tabsCollapse.splice(this.tabsCollapse.indexOf(tabItem), 1)
+    this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
   }
 
   function closeCurrTab (index) {
@@ -506,8 +507,7 @@ let NavPageUtil = function () {
     let preTab
 
     if (this.tabsCollapse.length === 0 && this.tabsData.length === 1) {
-      // this.tabsData.splice(idx, 1)
-      Array.prototype.splice.call(this.tabsData, idx, 1)
+      this.tabsData.splice(idx, 1)
       this.tabsDataStack.length = 0
       this.tabContents.length = 0
       return
@@ -521,21 +521,17 @@ let NavPageUtil = function () {
 
     if (this.tabsCollapse.indexOf(preTab) === -1) {
       this.selectTabItem(preTab)
-      // this.tabsData.splice(idx, 1)
-      Array.prototype.splice.call(this.tabsData, idx, 1)
+      this.tabsData.splice(idx, 1)
       this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
       if (this.tabsCollapse.length) {
         this.tabCollapseToData()
       }
     } else {
-      // this.tabsData.splice(idx, 1)
-      Array.prototype.splice.call(this.tabsData, idx, 1)
-      // this.tabsCollapse.splice(this.tabsCollapse.indexOf(preTab), 1)
-      Array.prototype.splice.call(this.tabsCollapse, this.tabsCollapse.indexOf(preTab), 1)
+      this.tabsData.splice(idx, 1)
+      this.tabsCollapse.splice(this.tabsCollapse.indexOf(preTab), 1)
       this.tabsData.push(preTab)
       this.selectTabItem(preTab)
-      // this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
-      Array.prototype.splice.call(this.tabsDataStack, this.tabsDataStack.indexOf(tabItem), 1)
+      this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
       this.tabReplaceWidthAutoAdapt(preTab)
     }
   }
@@ -545,10 +541,8 @@ let NavPageUtil = function () {
     let idxActive = this.findActiveTabIdx()
 
     if (idx !== idxActive) {
-      // this.tabsData.splice(idx, 1)
-      Array.prototype.splice.call(this.tabsData, idx, 1)
-      // this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
-      Array.prototype.splice.call(this.tabsDataStack, this.tabsDataStack.indexOf(tabItem), 1)
+      this.tabsData.splice(idx, 1)
+      this.tabsDataStack.splice(this.tabsDataStack.indexOf(tabItem), 1)
       if (this.tabsCollapse.length) {
         this.tabCollapseToData()
       }
@@ -665,6 +659,28 @@ let NavPageUtil = function () {
     }
   }
 
+  function treeIterator (data, attr, value) {
+    console.warn(222222, data, attr, value)
+    function ti (data, index) {
+      let node = data
+      let children = node.children
+      if (!(children && children.length)) {
+        return
+      }
+
+      while (index < children.length) {
+        if (typeof attr === 'function') {
+          attr(children[index])
+        } else {
+          children[index][attr] = value
+        }
+        ti(children[index], 0)
+        index++
+      }
+    }
+    ti(data, 0)
+  }
+
   return {
     buildBreadcrumb,
     closeAllTabs,
@@ -693,6 +709,7 @@ let NavPageUtil = function () {
     tabCollapseToData,
     tabReplaceWidthAutoAdapt,
     tabsAutoLayout,
+    treeIterator,
     alsOpenComponent
   }
 }
