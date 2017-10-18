@@ -8,6 +8,7 @@ import News from '../components/admin/news'
 import Matchs from '../components/admin/matchs'
 import Products from '../components/admin/products'
 import Reports from '../components/admin/reports'
+import User from '../components/admin/user'
 
 export default [
   {
@@ -18,6 +19,10 @@ export default [
     path: '/admin/login',
     name: 'adminLogin',
     component: Login
+  }, {
+    path: '/admin/user',
+    name: 'adminUser',
+    component: User
   }, {
     path: '/admin/images',
     name: 'adminImages',

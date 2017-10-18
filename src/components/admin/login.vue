@@ -115,13 +115,14 @@
 <script type="text/ecmascript-6">
   import $ from 'jquery'
   import {resta} from '../../assets/rest'
+  import Cookie from '../../assets/js/cookie'
   export default {
     name: 'Login',
     data () {
       return {
         formInline: {
-          user: 'tuhanjiang',
-          password: '200810'
+//          user: 'tuhanjiang',
+//          password: '200810'
         },
         ruleInline: {
           user: [
@@ -132,7 +133,7 @@
             { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
           ]
         },
-        remember: true,
+        remember: false,
         loading: false,
         loginText: '登录'
       }
@@ -145,10 +146,16 @@
             this.loading = true
             this.loginText = '正在登录'
             resta.post('/login', {username: this.formInline.user, password: this.formInline.password}, true).done(res => {
-//              this.loading = false
               if (res.body) {
                 this.$Message.success('登录成功！即将跳转 ...')
                 setTimeout(() => {
+                  if (!this.remember) {
+                    Cookie.delete('sessionUser')
+                  } else {
+                    const sessionUser = this.formInline
+                    sessionUser.remember = this.remember
+                    Cookie.set('sessionUser', JSON.stringify(sessionUser), 7)
+                  }
                   this.$router.push({path: '/admin/'})
 //                  console.log(this.$route, window.location)
 //                  const adminPageUrl = window.location.host + '/admin/login'
@@ -158,11 +165,14 @@
                   window.location.reload()
                 }, 2000)
               } else {
+                this.loading = false
+                this.loginText = '登录'
                 this.$Message.error(res.header.message)
               }
-            }).fail(() => {
+            }).fail((res) => {
               this.loading = false
               this.loginText = '登录'
+              this.$Message.error(res.header.message)
             })
           } else {
             this.$Message.error('表单验证失败!')
@@ -171,6 +181,12 @@
       }
     },
     created () {
+      const userCookie = JSON.parse(Cookie.get('sessionUser'))
+      if (userCookie) {
+        this.formInline.user = userCookie.user
+        this.formInline.password = userCookie.password
+        this.remember = userCookie.remember
+      }
       setTimeout(() => {
         $('.ivu-input').css({'height': '50px', 'font-size': 'larger'})
       })

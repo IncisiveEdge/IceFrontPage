@@ -3,7 +3,8 @@ import Login from '../components/index/Login'
 import Register from '../components/index/Register'
 import Logout from '../components/index/Logout'
 import User from '../components/index/User'
-import NotFound from '../404.vue'
+import Blank from '../blank'
+import NotFound from '../404'
 
 export default [
   {
@@ -26,6 +27,10 @@ export default [
     path: '/u/:user',
     name: 'User',
     component: User
+  }, {
+    path: '/blank',
+    name: 'blank',
+    component: Blank
   }, {
     path: '*',
     name: 'pageNotFound',

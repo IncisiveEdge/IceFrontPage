@@ -35,6 +35,17 @@
     height: calc(100% - 140px);
   }
 
+  .layout-content-addition{
+    font-size: larger;
+    color: #aaa;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+  }
+
   .layout-content-main {
     padding: 10px;
   }
@@ -184,7 +195,7 @@
         <div class="layout-logo-left">
           © Amarsoft
         </div>
-        <MenuItem v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">
+        <MenuItem v-if="menuItem.visible !== false" v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">
           <Icon :type="menuItem.icon" :size="iconSize"></Icon>
           <span class="layout-text" v-text="menuItem.name"></span>
         </MenuItem>
@@ -213,7 +224,7 @@
           </Breadcrumb>
         </div>
         <div style="position: absolute; right: 15px; top: 15px">
-          <Dropdown style="margin-left: 20px"  @on-click="logout">
+          <Dropdown trigger="click" style="margin-left: 20px"  @on-click="userOptions">
             <Button type="primary">
               用户：{{user.name}}
               <Icon type="arrow-down-b"></Icon>
@@ -260,12 +271,15 @@
           </Dropdown-menu>
         </Dropdown>
 
-        <div class="layout-content">
+        <div class="layout-content" v-if="tabsDataStack.length">
           <!--<transition class="animate-content" mode="out-in" :enter-active-class="'animated '+config.animateIn" :leave-active-class="'animated '+config.animateOut">-->
             <!--<keep-alive>-->
           <router-view class="content-router-view"></router-view>
             <!--</keep-alive>-->
           <!--</transition>-->
+        </div>
+        <div class="layout-content-addition" v-else>
+          暂无页面数据
         </div>
         <!--<Tabs type="card" closable :animated="false" @on-tab-remove="handleTabRemove">-->
           <!--<TabPane v-for="(item, index) in tabItems" :key="index" v-if="item.active" :label="item.name" :id="'tab-item-'+ item.id">-->
@@ -284,7 +298,7 @@
       </div>
 
       <div class="layout-copy">
-        2011-2017 &copy; Amarfot
+        2011-2017 &copy; Amarsoft
       </div>
       </Col>
     </Row>
@@ -342,7 +356,7 @@
       }
     },
     methods: {
-      logout (name) {
+      userOptions (name) {
         if (name === 'logout') {
           resta.get('/logout').done((res) => {
             if (res.body) {
@@ -353,6 +367,16 @@
               }, 2000)
             }
           })
+        } else if (name === 'view') {
+          const item = {
+            id: 'user',
+            url: '/admin/user',
+            name: '用户信息查看',
+            icon: 'cube',
+            visible: false
+          }
+          this.menuData.push(item)
+          this.selectMegaMenuItem(item)
         }
       },
       toggleClick () {
