@@ -440,20 +440,20 @@ let NavPageUtil = function () {
   }
 
   function closeAllTabs () {
-    this.tabsData.length = 0
-    this.tabsDataStack.length = 0
-    this.tabsCollapse.length = 0
-    this.tabContents.length = 0
-    this.currTabsWidth = 0
+    this.tabsData = []
+    this.tabsDataStack = []
+    this.tabsCollapse = []
+    this.tabContents = []
+    this.currTabsWidth = []
   }
 
   function closeOtherTabs () {
     let activeItem = this.tabsData[this.findActiveTabIdx()]
     let activeContent = this.findActiveContent()
-    this.tabsData.length = 0
-    this.tabsDataStack.length = 0
-    this.tabsCollapse.length = 0
-    this.tabContents.length = 0
+    this.tabsData = []
+    this.tabsDataStack = []
+    this.tabsCollapse = []
+    this.tabContents = []
     if (activeItem) {
       this.tabsData.push(activeItem)
       this.tabsDataStack.push(activeItem)
@@ -508,8 +508,8 @@ let NavPageUtil = function () {
 
     if (this.tabsCollapse.length === 0 && this.tabsData.length === 1) {
       this.tabsData.splice(idx, 1)
-      this.tabsDataStack.length = 0
-      this.tabContents.length = 0
+      this.tabsDataStack = []
+      this.tabContents = []
       return
     }
 

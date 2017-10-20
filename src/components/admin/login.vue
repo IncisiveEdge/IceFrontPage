@@ -100,8 +100,8 @@
               <Checkbox v-model="remember">记住我</Checkbox>
             </FormItem>
             <FormItem>
-              <Button :disabled="loading" type="success" size="large" long @click="handleSubmit('formInline')">
-                <Icon v-if="loading" type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+              <Button :loading="loading" type="success" size="large" long @click="handleSubmit('formInline')">
+                <!--<Icon v-if="loading" type="load-c" size=18 class="demo-spin-icon-load"></Icon>-->
                 <span v-text="loginText"></span>
               </Button>
             </FormItem>

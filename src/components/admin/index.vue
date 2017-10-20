@@ -32,7 +32,12 @@
     overflow: hidden;
     background: #fff;
     border-radius: 4px;
-    height: calc(100% - 140px);
+    height: calc(100% - 73px);
+  }
+
+  .router-content{
+    height: calc(100% - 40px);
+    overflow: auto;
   }
 
   .layout-content-addition{
@@ -51,9 +56,15 @@
   }
 
   .layout-copy {
+    padding: 10px 5px;
+    background-color: rgba(0, 0, 0, .3);
+    border-radius: 2px 2px 0 0;
     text-align: center;
-    padding: 10px 0 20px;
+    width: 100%;
     color: #9ea7b4;
+    position: absolute;
+    bottom: 0;
+
   }
 
   .layout-menu-left {
@@ -191,35 +202,48 @@
   <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
     <Row type="flex">
       <Col :span="spanLeft" class="layout-menu-left">
-      <Menu active-name="1" theme="dark" width="auto"  @on-select="selectItem" accordion>
-        <div class="layout-logo-left">
-          © Amarsoft
-        </div>
-        <MenuItem v-if="menuItem.visible !== false" v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">
-          <Icon :type="menuItem.icon" :size="iconSize"></Icon>
-          <span class="layout-text" v-text="menuItem.name"></span>
-        </MenuItem>
-        <!--<Submenu v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">-->
-          <!--<template slot="title">-->
-            <!--<Icon :type="menuItem.icon" :size="iconSize"></Icon>-->
-            <!--<span class="layout-text" v-text="menuItem.name"></span>-->
-          <!--</template>-->
-          <!--<MenuItem v-if="menuItem.children && menuItem.children.length" v-for="(subMenuItem, subIndex) in menuItem.children" :id="'menu-item-'+ menuItem.id + '-' +subMenuItem.id" :key="subIndex" :name="index + '-' +subIndex">-->
-            <!--<template>-->
-              <!--<Icon :type="subMenuItem.icon" :size="iconSize"></Icon>-->
-              <!--<span class="layout-text" v-text="subMenuItem.name"></span>-->
+        <Menu active-name="1" theme="dark" width="auto"  @on-select="selectItem" accordion>
+          <div class="layout-logo-left">
+            © Amarsoft
+          </div>
+          <MenuItem v-if="menuItem.visible !== false" v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">
+            <Icon :type="menuItem.icon" :size="iconSize"></Icon>
+            <span class="layout-text" v-text="menuItem.name"></span>
+          </MenuItem>
+          <!--<Submenu v-for="(menuItem, index) in menuData" :id="'menu-item-'+ menuItem.id" :key="index" :name="index">-->
+            <!--<template slot="title">-->
+              <!--<Icon :type="menuItem.icon" :size="iconSize"></Icon>-->
+              <!--<span class="layout-text" v-text="menuItem.name"></span>-->
             <!--</template>-->
-          <!--</MenuItem>-->
-        <!--</Submenu>-->
-      </Menu>
+            <!--<MenuItem v-if="menuItem.children && menuItem.children.length" v-for="(subMenuItem, subIndex) in menuItem.children" :id="'menu-item-'+ menuItem.id + '-' +subMenuItem.id" :key="subIndex" :name="index + '-' +subIndex">-->
+              <!--<template>-->
+                <!--<Icon :type="subMenuItem.icon" :size="iconSize"></Icon>-->
+                <!--<span class="layout-text" v-text="subMenuItem.name"></span>-->
+              <!--</template>-->
+            <!--</MenuItem>-->
+          <!--</Submenu>-->
+        </Menu>
+        <div class="layout-copy">
+          2011-2017 &copy; Amarsoft
+        </div>
       </Col>
       <Col :span="spanRight" style="height: 100%">
       <div class="layout-header">
         <Button type="text" @click="toggleClick">
           <Icon type="navicon" size="32"></Icon>
         </Button>
+        <Dropdown trigger="click"  @on-click="closeTab">
+          <Button type="text" style="padding: 6px 10px 6px 0">
+            关闭
+            <Icon type="arrow-down-b"></Icon>
+          </Button>
+          <DropdownMenu slot="list">
+            <DropdownItem name="other">关闭其他</DropdownItem>
+            <DropdownItem name="all">关闭所有</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <div class="layout-breadcrumb">
-          <Breadcrumb  v-if="activeTabItem && activeTabItem.breadcrumbData">
+          <Breadcrumb v-if="activeTabItem && activeTabItem.breadcrumbData">
             <BreadcrumbItem href="#" v-for="(bcruItem, index) in activeTabItem.breadcrumbData" :key="index" v-text="bcruItem.name"></BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -271,7 +295,7 @@
           </Dropdown-menu>
         </Dropdown>
 
-        <div class="layout-content" v-if="tabsDataStack.length">
+        <div class="router-content" v-if="tabsDataStack.length">
           <!--<transition class="animate-content" mode="out-in" :enter-active-class="'animated '+config.animateIn" :leave-active-class="'animated '+config.animateOut">-->
             <!--<keep-alive>-->
           <router-view class="content-router-view"></router-view>
@@ -295,10 +319,6 @@
           <!--</TabPane>-->
         <!--</Tabs>-->
         <!--<div class="layout-content-main">内容区域</div>-->
-      </div>
-
-      <div class="layout-copy">
-        2011-2017 &copy; Amarsoft
       </div>
       </Col>
     </Row>
@@ -356,6 +376,14 @@
       }
     },
     methods: {
+      closeTab (name) {
+        if (name === 'other') {
+          this.closeOtherTabs()
+        }
+        if (name === 'all') {
+          this.closeAllTabs()
+        }
+      },
       userOptions (name) {
         if (name === 'logout') {
           resta.get('/logout').done((res) => {
