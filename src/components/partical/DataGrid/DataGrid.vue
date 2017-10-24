@@ -2,9 +2,8 @@
 
 </style>
 <template>
-  <div style="padding: 20px">
+  <div>
     <div style="margin: 10px">
-      <Button v-for="(btn, index) in buttonsList" :key="index" :id="btn.id" :type="btn.type" :size="btn.size" :icon="btn.icon" @click="btn.onclick">{{btn.name}}</Button>
       <!--<Button type="primary" icon="plus-round">新增</Button>-->
       <!--<Button type="warning" icon="edit">修改</Button>-->
       <!--<Button type="success" icon="eye">查看</Button>-->
@@ -24,7 +23,7 @@
       <!--<Radio label="small">小</Radio>-->
       <!--</Radio-group>-->
     </div>
-    <Table :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
+    <Table ref="dataGrid" :highlight-row="config.selectedMode === 'single'" @on-current-change="onSelectedRow" @on-selection-change="onSelectedRow" :loading="config.loading" :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
     <div v-if="config.pagination.total" style="margin-top: 20px;overflow: hidden">
       <div style="float: right;margin-bottom: 180px;">
         <Page show-total show-sizer show-elevator :total="config.pagination.total" :current="config.pagination.currentPage" :page-size-opts="config.pagination.sizeOptions" @on-change="onChange" @on-page-size-change="onSizeChange"></Page>
@@ -33,21 +32,31 @@
   </div>
 </template>
 <script>
+  import arrayUtil from '../../../assets/js/array'
+  import $ from 'jquery'
   export default {
     name: 'DataGrid',
     props: ['rows', 'columns', 'config'],
     data () {
       return {
-        buttonsList: [{
-          id: 'test',
-          name: '测试',
-          icon: 'edit',
-          type: 'primary',
-          size: 'default',
-          onclick (event) {
-            console.log(event)
-          }
-        }],
+//        buttonsList: [{
+//          id: 'test',
+//          name: '测试',
+//          icon: 'edit',
+//          type: 'primary',
+//          size: 'default',
+//          onclick: event => {
+//            let sm = this.config.selectedMode
+//            if (sm === 'single') {
+//              this.$refs.dataGrid.clearCurrentRow()
+//              this.config.selectedMode = 'multiple'
+//            } else if (sm === 'multiple') {
+//              console.log(this, this.selectAll)
+//              this.$refs.dataGrid.selectAll(false)
+//              this.config.selectedMode = 'single'
+//            }
+//          }
+//        }],
         showBorder: false,
         showStripe: false,
         showHeader: true,
@@ -64,8 +73,6 @@
 //          this.config.pagination.onChange(curPage)
 //          return
 //        }
-
-        console.warn(11111, curPage)
       },
       onSizeChange (pageSize) {
         this.config.pagination.perPage = pageSize
@@ -73,14 +80,15 @@
 //          this.config.pagination.onSizeChange(pageSize)
 //          return
 //        }
-
-        console.warn(22222, pageSize)
+      },
+      onSelectedRow (row, oldRow) {
+//        console.log(row, oldRow)
       }
 
     },
     computed: {
       data () {
-        if (!this.config.pagination.async) {
+        if (this.rows && !this.config.pagination.async) {
           return this.rows.filter((item, index) => {
             const min = Math.max((this.config.pagination.currentPage - 1) * this.config.pagination.perPage + 1, 1)
             const max = Math.min(this.config.pagination.currentPage * this.config.pagination.perPage, this.rows.length)
@@ -89,13 +97,40 @@
         }
       },
       template () {
-        let tpl = [{
+        if (!this.columns) return
+        let tpl = []
+        tpl = tpl.concat(this.columns)
+
+        if (this.config.customizeElements && this.config.customizeElements.length) {
+          this.config.customizeElements.forEach((item, index) => {
+            const ind = arrayUtil.duplicate(item, tpl, (a, b) => a.key === b.key)
+            if (ind <= 0) {
+              tpl.push(item)
+            } else {
+              $.extend(tpl[ind], item)
+            }
+          })
+        }
+
+        tpl.sort((a, b) => {
+          return +a.sortNo - +b.sortNo
+        })
+
+        tpl.unshift({
           type: 'index',
           title: '#',
           align: 'center',
-          width: 50
-        }]
-        tpl = tpl.concat(this.columns)
+          width: 60
+        })
+
+        if (this.config.selectedMode === 'multiple') {
+          tpl.unshift({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+
         return tpl
       }
     },

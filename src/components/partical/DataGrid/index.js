@@ -20,7 +20,14 @@ function dataGridBuilder (objectId, scope) {
   // scope[objectId] = vm
 
   let vm = scope ? scope[objectId] : {}
+  vm.tplData = []
+  vm.listData = []
   vm.globalConfig = {
+    loading: true,
+    selectedMode: 'multiple',
+    height: undefined,
+    customizeElements: [],
+    buttonsList: [],
     pagination: {
       total: 0,
       currentPage: 1,
@@ -88,12 +95,12 @@ function dataGridBuilder (objectId, scope) {
     const listPromise = queryListData(queryListConfig.api, queryListConfig.query).done(res => {
       if (res.body) {
         vm.globalConfig.pagination.total = res.body.length || 0
-        console.log(res.body.length)
         fillData(res.body)
       }
     })
 
     return $.when(listTplPromise, listPromise).then(() => {
+      vm.globalConfig.loading = false
       vm.created = true
     })
   }
@@ -125,58 +132,29 @@ function dataGridBuilder (objectId, scope) {
     queryFilterData(query)
   }
 
-  // btn: [name, onclick, id, type, icon, size] || {...}
-  function addBtn (btn) {
-    vm.buttonsList = vm.buttonsList || []
-    if (btn instanceof Array) {
-      let btnObject = {}
-      if (!btn[0]) {
-        console.error('button name is required !')
-        return
-      } else {
-        btnObject.name = btn[0]
-      }
+  function setElement (element) {
+    vm.globalConfig.customizeElements.push(element)
+  }
 
-      if (!btn[1] || !(btn instanceof Function)) {
-        console.error('button onclick event is required, need Function type anyway !')
-        return
-      } else {
-        btnObject.onclick = btn[1]
-      }
-      btnObject.id = btn[2] || 'data-list-btn' + Math.uuid()
-      btnObject.type = btn[3] || 'default'
-      btnObject.icon = btn[4] || ''
-      btnObject.size = btn[5] || ''
-      btnObject.disabed = btn[6] || false
-      // 未做查重处理
-      vm.buttonsList.push(btnObject)
-    } else if (btn instanceof Object) {
-      if (!btn.name) {
-        console.error('button name is required !')
-        return
-      }
-      if (!btn.onclick) {
-        console.error('button onclick event is required, need Function type anyway !')
-        return
-      }
-      let btnObject = {
-        name: '',
-        onclick: null,
-        id: 'data-list-btn-' + Math.uuid(),
-        type: '',
-        icon: '',
-        size: ''
-      }
-      $.extend(btnObject, btn)
-      vm.buttonsList.push(btnObject)
-    }
-    return
+  function setWrapperMode (bool) {
+    vm.globalConfig.height = bool ? undefined : 300
+  }
+
+  function setSelectedMode (selectedType) {
+    vm.globalConfig.selectedMode = selectedType || 'single'
+  }
+
+  function getSelectedMode () {
+    return vm.globalConfig.selectedMode
   }
 
   return {
     render,
-    addBtn,
     search,
+    setElement,
+    setWrapperMode,
+    setSelectedMode,
+    getSelectedMode,
     vm
   }
 }

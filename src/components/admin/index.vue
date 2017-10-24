@@ -457,7 +457,10 @@
       $.extend(this, navPageFactory)
       setTimeout(() => {
         const tabItem = this.searchItemByUrl(this.$route.path, this.menuData)
-        tabItem && this.selectMegaMenuItem(tabItem)
+        if (tabItem) {
+          tabItem.active = true
+          this.selectMegaMenuItem(tabItem)
+        }
 //        this.selectMegaMenuItem(this.menuData[0])
         this.mainMenuResize(this, this)
         $('.ivu-tabs-bar').css('margin-bottom', '0')
