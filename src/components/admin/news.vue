@@ -23,7 +23,7 @@
       dataGrid.setElement({
         key: 'options',
         title: '操作',
-        fixed: 'right',
+//        fixed: 'right',
         width: 160,
         render: (h, params) => {
           return h('ButtonGroup', [

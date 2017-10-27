@@ -85,6 +85,14 @@ function dataGridBuilder (objectId, scope) {
     return queryData(api_src, query)
   }
 
+  function renderOnly (listData, tplData) {
+    fillTemplate(tplData)
+    vm.globalConfig.pagination.total = listData.length || 0
+    fillData(listData)
+    vm.globalConfig.loading = false
+    vm.created = true
+  }
+
   function render (queryListTplConfig, queryListConfig) {
     if (!queryListTplConfig || !queryListConfig) {
       return
@@ -148,13 +156,25 @@ function dataGridBuilder (objectId, scope) {
     return vm.globalConfig.selectedMode
   }
 
+  function setItemsPerPage (counts) {
+    vm.globalConfig.pagination.perPage = counts
+    if (vm.globalConfig.pagination.sizeOptions.indexOf(counts) === -1) {
+      vm.globalConfig.pagination.sizeOptions.push(counts)
+      vm.globalConfig.pagination.sizeOptions.sort((a, b) => {
+        return a - b
+      })
+    }
+  }
+
   return {
     render,
+    renderOnly,
     search,
     setElement,
     setWrapperMode,
     setSelectedMode,
     getSelectedMode,
+    setItemsPerPage,
     vm
   }
 }

@@ -2,7 +2,7 @@
 
 </style>
 <template>
-  <div>
+  <div style="overflow: auto">
     <div style="margin: 10px">
       <!--<Button type="primary" icon="plus-round">新增</Button>-->
       <!--<Button type="warning" icon="edit">修改</Button>-->
@@ -23,10 +23,10 @@
       <!--<Radio label="small">小</Radio>-->
       <!--</Radio-group>-->
     </div>
-    <Table ref="dataGrid" :highlight-row="config.selectedMode === 'single'" @on-current-change="onSelectedRow" @on-selection-change="onSelectedRow" :loading="config.loading" :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
+    <Table height="200" ref="dataGrid" :highlight-row="config.selectedMode === 'single'" @on-current-change="onSelectedRow" @on-selection-change="onSelectedRow" :loading="config.loading" :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
     <div v-if="config.pagination.total" style="margin-top: 20px;overflow: hidden">
-      <div style="float: right;margin-bottom: 180px;">
-        <Page show-total show-sizer show-elevator :total="config.pagination.total" :current="config.pagination.currentPage" :page-size-opts="config.pagination.sizeOptions" @on-change="onChange" @on-page-size-change="onSizeChange"></Page>
+      <div style="float: right">
+        <Page show-total show-sizer show-elevator :total="config.pagination.total" :current="config.pagination.currentPage" :page-size="config.pagination.perPage" :page-size-opts="config.pagination.sizeOptions" @on-change="onChange" @on-page-size-change="onSizeChange"></Page>
       </div>
     </div>
   </div>

@@ -13,18 +13,16 @@
     :render-format="setting.render"
     @on-change="setting.onChange"
     :filterable="setting.filterable"
-    :filter-method="setting.filterMethod"
+    @filter-method="setting.filterMethod"
     :operations="setting.bridgeName"
     :list-style="setting.listStyle"
     :not-found-text="setting.placeholder"
-    :filter-placeholder="setting.filterPlaceholder",
+    :filter-placeholder="setting.filterPlaceholder"
     :titles="setting.titles"
     :selected-keys="setting.selectedKeys"
     :options="setting.options"
   >
-    <div v-if="setting.bottomVisible" :style="setting.bottomStyle">
-      <!--<Button type="ghost" size="small" @click="reloadMockData">刷新</Button>-->
-    </div>
+    <slot name="bottom"></slot>
   </Transfer>
 </template>
 
