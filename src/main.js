@@ -5,6 +5,7 @@ import App from './App'
 import router from './router/entrance'
 import store from './store'
 import 'bootstrap/js/bootstrap.min.js'
+import './assets/css/main-content.css'
 import iView from 'iview'
 import 'jquery'
 

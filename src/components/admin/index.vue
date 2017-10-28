@@ -40,6 +40,10 @@
     overflow: auto;
   }
 
+  .content-router-view{
+    height: 100%;
+  }
+
   .layout-content-addition{
     font-size: larger;
     color: #aaa;

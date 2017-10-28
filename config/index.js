@@ -27,12 +27,21 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // proxyTable: {
+    //   '/api': {
+    //     target: 'http://localhost:3000',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': '/api'
+    //     }
+    //   }
+    // },
     proxyTable: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://115.28.67.79:8080',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/api'
+          '^/api': '/ICEManage'
         }
       }
     },

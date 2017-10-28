@@ -23,6 +23,7 @@
       <!--<Radio label="small">小</Radio>-->
       <!--</Radio-group>-->
     </div>
+    <ie-btn :model="config.ieBtn"></ie-btn>
     <Table height="200" ref="dataGrid" :highlight-row="config.selectedMode === 'single'" @on-current-change="onSelectedRow" @on-selection-change="onSelectedRow" :loading="config.loading" :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
     <div v-if="config.pagination.total" style="margin-top: 20px;overflow: hidden">
       <div style="float: right">
@@ -33,10 +34,14 @@
 </template>
 <script>
   import arrayUtil from '../../../assets/js/array'
+  import ieBtn from '../Buttons/Buttons'
   import $ from 'jquery'
   export default {
     name: 'DataGrid',
     props: ['rows', 'columns', 'config'],
+    components: {
+      ieBtn
+    },
     data () {
       return {
 //        buttonsList: [{

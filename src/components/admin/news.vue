@@ -1,90 +1,82 @@
 <template>
   <div style="padding: 20px">
-    <Button type="primary" icon="plus-round" @click="toggleSelection">新增</Button>
-    <data-grid :rows="news.listData" :columns="news.tplData" :config="news.globalConfig"></data-grid>
+    <ie-list :rows="ieList.listData" :columns="ieList.tplData" :config="ieList.globalConfig"></ie-list>
+    <i-modal :modal="modal">
+      <div slot="content">
+        <news-edit></news-edit>
+      </div>
+    </i-modal>
   </div>
 </template>
 <script>
-  import DataGrid from '../partical/DataGrid/index'
-//  import Buttons from '../partical/Buttons/index'
-  const dataGrid = DataGrid.builder('news')
-  dataGrid.setWrapperMode(true)
+  import {IEListObject} from '../../assets/IEList'
+  import ieList from '../partical/DataGrid/DataGrid'
+  import NewsEdit from '../partical/NewsAdmin/NewsEdit'
+  import IModal from '../partical/Modal'
   export default {
     name: 'News',
     components: {
-      DataGrid: DataGrid.component
+      ieList,
+      NewsEdit,
+      IModal
     },
     data () {
       return {
-        news: dataGrid.vm
+        ieList: new IEListObject('ieList', this),
+        modal: {
+          model: false
+        }
       }
     },
     created: function () {
-      dataGrid.setElement({
-        key: 'options',
-        title: '操作',
-//        fixed: 'right',
-        width: 160,
-        render: (h, params) => {
-          return h('ButtonGroup', [
-            h('Button', {
-              props: {
-                type: 'primary',
-                size: 'small'
-              },
-              style: {
-              },
-              on: {
-                click: () => {
-//                  console.log(111111, this)
-                  this.$Modal.info({
-                    title: '用户信息',
-                    content: params
-                  })
-                }
-              }
-            }, '查看'),
-            h('Button', {
-              props: {
-                type: 'success',
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  this.remove(params.index)
-                }
-              }
-            }, '编辑'),
-            h('Button', {
-              props: {
-                type: 'error',
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  this.remove(params.index)
-                }
-              }
-            }, '删除')
-          ])
-        }
-      })
-      dataGrid.render({api: '/getPostTpl'}, {api: '/getPostAll'}).done(() => {
-//    console.warn(this.news.listData, this.news.listData instanceof Array)
-//    console.warn(this.news.tplData, this.news.tplData instanceof Array)
+      /*
+       name: '',
+       onclick: '',
+       icon: '',
+       type: 'default',
+       size: 'default',
+       id: 'data-list-btn-' + new Date().getTime() * Math.random(),
+       disabled: false,
+       visible: true
+       */
+      this.ieList.addBtn(['新增', 'new', 'plus', 'primary'])
+      this.ieList.addBtn(['查看', 'view', 'eye', 'info'])
+      this.ieList.addBtn(['编辑', 'edit', 'edit', 'success'])
+      this.ieList.addBtn(['删除', 'del', 'trash-a', 'error'])
+      this.ieList.render({api: '/getnewstbtile.do'}, {api: '/getnewslist.do'}).done(() => {
       })
     },
     methods: {
-      show: (text) => {
-        console.log(22222, this)
-//        this.$Modal.info({
-//          title: '用户信息',
-//          content: text
-//        })
+      new () {
+        this.modal.model = true
+        this.modal.title = '新增新闻'
+        this.modal.width = 800
+        this.modal.textOk = '新增'
+        this.modal.onOk = () => {
+          this.modal.model = false
+        }
+        this.modal.onCancel = () => {
+          this.modal.model = false
+        }
       },
-      toggleSelection: () => {
-        const mode = dataGrid.getSelectedMode() !== 'multiple' ? 'multiple' : 'single'
-        dataGrid.setSelectedMode(mode)
+      view () {
+
+      },
+      edit () {
+
+      },
+      del () {
+        this.$Modal.confirm({
+          title: '确认对话框标题',
+          content: `<Icon type="information-circled" style="font-size: 30px;color:#f60;float:left"></Icon>
+                    <p>点击删除后，轮播图片列表将永久性删除数据</p>
+                  <p>是否继续删除？</p>`,
+          okText: '删除',
+          cancelText: '取消',
+          onOk: () => {
+            console.log('aaa')
+          }
+        })
       }
     }
   }

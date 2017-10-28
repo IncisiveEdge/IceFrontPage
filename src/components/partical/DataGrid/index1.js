@@ -98,13 +98,11 @@ function dataGridBuilder (objectId, scope) {
       return
     }
     const listTplPromise = queryListTplData(queryListTplConfig.api, queryListTplConfig.query).done(res => {
-      res = tplRender(res)
       fillTemplate(res)
     })
     const listPromise = queryListData(queryListConfig.api, queryListConfig.query).done(res => {
       if (res) {
         vm.globalConfig.pagination.total = res.length || 0
-        resta.get('/getnewscontentbyid.do', {newstitleid: res[1].id})
         fillData(res)
       }
     })
@@ -190,7 +188,6 @@ function dataGridBuilder (objectId, scope) {
     setSelectedMode,
     getSelectedMode,
     setItemsPerPage,
-    tplRender,
     vm
   }
 }
