@@ -3,6 +3,7 @@ import Login from '../components/index/Login'
 import Register from '../components/index/Register'
 import Logout from '../components/index/Logout'
 import User from '../components/index/User'
+import News from '../components/index/News'
 import Blank from '../blank'
 import NotFound from '../404'
 
@@ -27,6 +28,10 @@ export default [
     path: '/u/:user',
     name: 'User',
     component: User
+  }, {
+    path: '/news',
+    name: 'News',
+    component: News
   }, {
     path: '/blank',
     name: 'blank',

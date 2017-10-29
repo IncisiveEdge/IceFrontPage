@@ -19,12 +19,12 @@ html,body{
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">Ice创客基地(前台</a>
+            <a href="/" class="navbar-brand">Ice创客基地(前台)</a>
           </div>
           <div class="navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="/">首页</a></li>
-              <li><a href="#">新闻资讯</a></li>
+              <li><a href="/news">新闻资讯</a></li>
               <li><a href="#">课程体系</a></li>
               <li><a href="#">营地赛事</a></li>
               <li><a href="#">产品教具</a></li>
