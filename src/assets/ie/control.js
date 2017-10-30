@@ -29,4 +29,8 @@
     $('.loading-block', _container).remove()
   }
 
+  ieControl.url = (_url) => {
+    return '/api' + _url
+  }
+
   export default ieControl

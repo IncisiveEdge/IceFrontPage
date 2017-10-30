@@ -3,29 +3,35 @@
     <ie-list :rows="ieList.listData" :columns="ieList.tplData" :config="ieList.globalConfig"></ie-list>
     <i-modal :modal="modal">
       <div slot="content">
-        <news-edit></news-edit>
+        <news-edit v-if="modalType === 'edit'" :item="item"></news-edit>
       </div>
     </i-modal>
+    <image-viewer ref="viewer"></image-viewer>
   </div>
 </template>
 <script>
-  import {IEListObject} from '../../assets/IEList'
-  import ieList from '../partical/DataGrid/DataGrid'
-  import NewsEdit from '../partical/NewsAdmin/NewsEdit'
-  import IModal from '../partical/Modal'
+  import ie from '@/assets/ie/ie'
+  import {IEListObject} from '@/assets/IEList'
+  import ieList from '@/components/partical/DataGrid/DataGrid'
+  import NewsEdit from '@/components/partical/NewsAdmin/NewsEdit'
+  import IModal from '@/components/partical/Modal'
+  import ImageViewer from '@/components/partical/ImageViewer'
   export default {
     name: 'News',
     components: {
       ieList,
       NewsEdit,
-      IModal
+      IModal,
+      ImageViewer
     },
     data () {
       return {
         ieList: new IEListObject('ieList', this),
         modal: {
           model: false
-        }
+        },
+        modalType: '',
+        item: null
       }
     },
     created: function () {
@@ -49,6 +55,7 @@
     methods: {
       new () {
         this.modal.model = true
+        this.modalType = 'edit'
         this.modal.title = '新增新闻'
         this.modal.width = 800
         this.modal.textOk = '新增'
@@ -60,7 +67,8 @@
         }
       },
       view () {
-
+        let previewImage = '/upload/newstitleimg/2-0.jpg'
+        this.$refs.viewer.show(ie.url(previewImage))
       },
       edit () {
 

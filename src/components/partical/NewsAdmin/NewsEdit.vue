@@ -38,6 +38,7 @@
   import IUpload from '../Upload'
   export default {
     name: '',
+    props: ['item'],
     components: {
       IUpload
     },

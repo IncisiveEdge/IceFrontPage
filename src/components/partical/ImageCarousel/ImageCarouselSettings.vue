@@ -85,11 +85,10 @@
 <script>
   import IModal from '../Modal'
   import ImgTransfer from './ImageTransfer'
-  import DataGrid from '../DataGrid/index'
+  import {IEListObject} from '../../../assets/IEList'
   import ImgModify from './imageModify'
   import $ from 'jquery'
 
-  const dataGrid = DataGrid.builder('images')
   export default {
     name: 'ImgCarouselController',
     props: ['setting'],
@@ -100,7 +99,7 @@
     },
     data () {
       return {
-        images: dataGrid.vm,
+        images: new IEListObject('ieList', this),
         modal: {
           model: false,
           title: '测试',
@@ -215,7 +214,7 @@
     created () {
       this.selectableImages = this.getMockData()
       this.selectedImages = this.getTargetKeys()
-      dataGrid.setItemsPerPage(5)
+      this.images.setItemsPerPage(5)
       const tplData = [{
         key: 'description',
         title: '描述'
@@ -233,7 +232,7 @@
         title: '图片地址'
       }]
 
-      dataGrid.setElement({
+      this.images.setElement({
         key: 'visible',
         render: (h, params) => {
           return h('iSwitch', {
@@ -258,59 +257,7 @@
         }
       })
 
-      dataGrid.setElement({
-        key: 'options',
-        title: '操作',
-        width: 240,
-        render: (h, params) => {
-          return h('div', [
-            h('Button', {
-              props: {
-                size: 'small',
-                type: 'primary',
-                icon: 'eye'
-              },
-              style: {
-                'margin-right': '5px'
-              },
-              on: {
-                click: () => {
-//                  this.modal.model = false
-                  this.$refs.modify.popView()
-                }
-              }
-            }, '查看'),
-            h('Button', {
-              props: {
-                size: 'small',
-                type: 'success',
-                icon: 'edit'
-              },
-              style: {
-                'margin-right': '5px'
-              },
-              on: {
-                click: () => {
-                  this.$refs.modify.popEdit()
-                }
-              }
-            }, '编辑'),
-            h('Button', {
-              props: {
-                size: 'small',
-                type: 'error',
-                icon: 'ios-trash'
-              },
-              on: {
-                click: () => {
-                  this.$refs.modify.popDel()
-                }
-              }
-            }, '删除')
-          ])
-        }
-      })
-      dataGrid.renderOnly(this.selectableImages, tplData)
+      this.images.renderOnly(this.selectableImages, tplData)
     }
   }
 </script>

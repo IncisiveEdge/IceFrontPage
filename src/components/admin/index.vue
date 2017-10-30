@@ -38,6 +38,7 @@
   .router-content{
     height: calc(100% - 40px);
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .content-router-view{
@@ -111,6 +112,7 @@
 
   .ivu-col {
     transition: width .2s ease-in-out;
+    height: 100%;
   }
 
   .ivu-tabs {
@@ -228,7 +230,7 @@
           <!--</Submenu>-->
         </Menu>
         <div class="layout-copy">
-          2011-2017 &copy; Amarsoft
+          2011-2017 &copy; Incisive Edge
         </div>
       </Col>
       <Col :span="spanRight" style="height: 100%">
@@ -326,6 +328,7 @@
       </div>
       </Col>
     </Row>
+
   </div>
 </template>
 <script>

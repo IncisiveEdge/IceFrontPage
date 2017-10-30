@@ -7,6 +7,7 @@
 //  import $ from 'jquery'
   import {IEInfoObject} from '../../assets/IEInfo'
   import ieInfo from '../partical/DataForm/index'
+  import {infoTplData, infoData} from '../../assets/simulate/demo-PersonInfo'
 
   //  console.log(DFInfo)
   export default {
@@ -20,7 +21,7 @@
       ieInfo
     },
     mounted () {
-      this.dfInfo.run().then(() => {
+      this.dfInfo.render(infoTplData, infoData).then(() => {
         console.log(this)
       })
     }
