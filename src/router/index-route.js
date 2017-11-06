@@ -4,6 +4,7 @@ import Register from '../components/index/Register'
 import Logout from '../components/index/Logout'
 import User from '../components/index/User'
 import News from '../components/index/News'
+import Products from '../components/index/Products'
 import Blank from '../blank'
 import NotFound from '../404'
 
@@ -32,6 +33,10 @@ export default [
     path: '/news',
     name: 'News',
     component: News
+  }, {
+    path: '/products',
+    name: 'Products',
+    component: Products
   }, {
     path: '/blank',
     name: 'blank',

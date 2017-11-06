@@ -49,7 +49,7 @@
       this.ieList.addBtn(['查看', 'view', 'eye', 'info'])
       this.ieList.addBtn(['编辑', 'edit', 'edit', 'success'])
       this.ieList.addBtn(['删除', 'del', 'trash-a', 'error'])
-      this.ieList.render({api: '/getnewstbtile.do'}, {api: '/getnewslist.do'}).done(() => {
+      this.ieList.render({api: '/getnewstbtitle.do'}, {api: '/getnewstitlelist.do'}).done(() => {
       })
     },
     methods: {

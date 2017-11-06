@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-//  import $ from 'jquery'
+  //  import $ from 'jquery'
   import {IEInfoObject} from '../../assets/IEInfo'
   import ieInfo from '../partical/DataForm/index'
   import {infoTplData, infoData} from '../../assets/simulate/demo-PersonInfo'

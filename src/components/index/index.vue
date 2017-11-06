@@ -27,7 +27,7 @@ html,body{
               <li><a href="/news">新闻资讯</a></li>
               <li><a href="#">课程体系</a></li>
               <li><a href="#">营地赛事</a></li>
-              <li><a href="#">产品教具</a></li>
+              <li><a href="/products">产品教具</a></li>
               <li><a href="#">关于ICE</a></li>
               <li class="dropdown">
                 <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
@@ -50,10 +50,10 @@ html,body{
       <!--<a href="#" class="close" data-dismiss="alert">&times;</a>-->
       <!--</div>-->
       <!--</div>-->
-      <div id="container" style="margin-top: 50px; height:calc(100% - 50px);overflow-x: hidden; overflow-y: auto">
+      <div id="container" style="margin-top: 50px; height:calc(100% - 80px);overflow-x: hidden; overflow-y: auto; background-color: #eaeaea">
         <router-view></router-view>
         <hr>
-        <footer>
+        <footer style="position: fixed;bottom:0;left:0;height: 30px;width: 100%; background-color: #eee">
           <p>
             <a href="#" target="_blank">
               Caro  2017
@@ -65,7 +65,6 @@ html,body{
 </template>
 
 <script>
-  import 'bootstrap/css/bootstrap.min.css'
   export default {
     name: 'Index',
     computed: {

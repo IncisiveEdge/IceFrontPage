@@ -332,7 +332,6 @@
   </div>
 </template>
 <script>
-  import 'iview/dist/styles/iview.css'
   import $ from 'jquery'
   import navPageFactory from '../../assets/js/nav-controller'
   import {resta} from '../../assets/rest'

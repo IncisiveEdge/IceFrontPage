@@ -140,7 +140,6 @@
   </div>
 </template>
 <script>
-  import 'iview/dist/styles/iview.css'
   import $ from 'jquery'
   export default {
     name: 'AdminIndex',
