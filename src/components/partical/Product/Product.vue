@@ -42,6 +42,7 @@
     text-align: justify;
     font-size: larger;
     padding-left: 40px;
+    overflow: hidden;
   }
 
   .bg .block{
@@ -128,7 +129,9 @@
       const wrapper = $('.bg', $(this.$el))
       this.width = wrapper.outerWidth()
       this.height = wrapper.outerHeight()
+//      console.log(this.width, this.height)
       const img = new Image()
+      this.image = '/static/images/demo/demo' + (parseInt(Math.random() * 30) + 1) + '.jpg'
       img.src = this.image
       img.onload = (event) => {
         this.loading = false
@@ -148,7 +151,7 @@
         } else {
           cell.css('width', '100%')
           const top = parseInt((img.height * wrapper.outerWidth() / img.width - wrapper.outerHeight()) / 2)
-          cell.css('left', -top + 'px')
+          cell.css('top', -top + 'px')
         }
       }
     }
