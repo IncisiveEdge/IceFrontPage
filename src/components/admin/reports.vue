@@ -4,7 +4,7 @@
 <script>
   /* eslint-disable */
   import '@/assets/plugins/ueditor/ueditor.config'
-  import '@/assets/plugins/ueditor/ueditor.all'
+//  import '@/assets/plugins/ueditor/ueditor.all'
 
   export default {
     data() {
@@ -19,7 +19,9 @@
       },
       config: {
         type: Object,
-        default: {}
+        default () {
+          return {}
+        }
       }
     },
     watch: {

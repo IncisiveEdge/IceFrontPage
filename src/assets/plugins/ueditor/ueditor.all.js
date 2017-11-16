@@ -24800,6 +24800,7 @@
                 '</p>';
             }
             me.execCommand('insertHtml', html);
+            me.fireEvent('afterUpfile', filelist);
           }
         }
       }

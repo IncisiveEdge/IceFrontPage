@@ -19,7 +19,9 @@
       },
       config: {
         type: Object,
-        default: {}
+        default () {
+          return {}
+        }
       }
     },
     watch: {

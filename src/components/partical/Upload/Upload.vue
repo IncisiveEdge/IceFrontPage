@@ -42,7 +42,7 @@
     computed: {
       Upload () {
         let m = {
-          url: '',
+          url: window.location.origin + '/api/ueditor/jsp/controller.jsp',
           before: (file) => {
 
           },

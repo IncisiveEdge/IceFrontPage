@@ -60,6 +60,7 @@ UE.plugin.register('insertfile', function (){
                             '</p>';
                     }
                     me.execCommand('insertHtml', html);
+                    me.fireEvent('afterUpfile', filelist);
                 }
             }
         }

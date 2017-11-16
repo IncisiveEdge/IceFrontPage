@@ -7,7 +7,7 @@
 </style>
 
 <template>
-  <Modal
+  <Modal ref="imodal"
     v-model="modalAttrs.model"
     :width="modalAttrs.width"
     :title="modalAttrs.title"

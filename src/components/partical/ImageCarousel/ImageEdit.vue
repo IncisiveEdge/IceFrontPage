@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import IUpload from '../Upload'
+  import IUpload from '../Upload/Upload'
   export default {
     name: '',
     components: {

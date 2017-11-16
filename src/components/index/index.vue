@@ -1,6 +1,6 @@
 <style>
   html,body{
-    overflow: hidden;
+    overflow: auto;
   }
 </style>
 
@@ -65,7 +65,7 @@
   <div style="height: 100%">
     <i-nav></i-nav>
 
-    <div id="container" style="margin-top: 50px; height:calc(100% - 50px);overflow-x: hidden; overflow-y: auto; background-color: #eaeaea">
+    <div id="container">
       <router-view></router-view>
       <hr>
       <footer>
