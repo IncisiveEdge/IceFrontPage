@@ -171,6 +171,18 @@ class IEListObject {
     return list
   }
 
+  getSelectedRows () {
+    return this.globalConfig.selectedRows
+  }
+
+  getSelectedRow () {
+    var rows = this.globalConfig.selectedRows
+    if (rows && rows.length) {
+      return rows[0]
+    }
+    return null
+  }
+
   addBtn (btn) {
     this.globalConfig.ieBtn.addBtn(btn)
   }

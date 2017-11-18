@@ -87,6 +87,10 @@
 //        }
       },
       onSelectedRow (row, oldRow) {
+        if (row) {
+          !(row instanceof Array) && (row = [row])
+          this.config.selectedRows = row
+        }
 //        console.log(row, oldRow)
       }
 

@@ -16,6 +16,8 @@
   import NewsEdit from '@/components/partical/NewsAdmin/NewsEdit'
   import IModal from '@/components/partical/Modal'
   import ImageViewer from '@/components/partical/ImageViewer'
+  import {resta} from '@/assets/rest.js'
+  console.log(resta)
   export default {
     name: 'News',
     components: {
@@ -31,7 +33,7 @@
           model: false
         },
         modalType: '',
-        item: null
+        item: {}
       }
     },
     created: function () {
@@ -60,6 +62,11 @@
         this.modal.width = 800
         this.modal.textOk = '新增'
         this.modal.onOk = () => {
+          if (this.item) {
+            resta.post('/insertnewsinfo.do', this.item).done(res => {
+              console.warn(res)
+            })
+          }
           this.modal.model = false
         }
         this.modal.onCancel = () => {
@@ -71,7 +78,32 @@
         this.$refs.viewer.show(ie.url(previewImage))
       },
       edit () {
-
+        const rows = this.ieList.getSelectedRows()
+        if (!rows || !rows.length) {
+          this.$Message.warning('请选择一条数据')
+          return
+        }
+        if (rows.length !== 1) {
+          this.$Message.warning('只能选择一条数据进行编辑')
+          return
+        }
+        this.item = rows[0]
+        this.modal.model = true
+        this.modalType = 'edit'
+        this.modal.title = '编辑新闻'
+        this.modal.width = 800
+        this.modal.textOk = '保存'
+        this.modal.onOk = () => {
+          if (this.item) {
+            resta.post('/insertnewsinfo.do', this.item).done(res => {
+              console.warn(res)
+            })
+          }
+          this.modal.model = false
+        }
+        this.modal.onCancel = () => {
+          this.modal.model = false
+        }
       },
       del () {
         this.$Modal.confirm({

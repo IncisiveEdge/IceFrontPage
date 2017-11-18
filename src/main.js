@@ -19,5 +19,11 @@ new Vue({
   template: '<App/>',
   components: { App },
   router,
-  store: store
+  store: store,
+  mounted () {
+    // 全局消息提示配置3秒延时，默认1.5秒
+    this.$Message.config({
+      duration: 3
+    })
+  }
 })

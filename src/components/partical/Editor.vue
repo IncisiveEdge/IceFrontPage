@@ -2,9 +2,7 @@
   <div ref="editor"></div>
 </template>
 <script>
-  /* eslint-disable */
-  import '@/assets/plugins/ueditor/ueditor.config'
-  import '@/assets/plugins/ueditor/ueditor.all'
+/* eslint-disable */
 
   export default {
     data() {
@@ -15,7 +13,7 @@
     props: {
       value: {
         type: String,
-        default: null
+        default: ''
       },
       config: {
         type: Object,
@@ -45,7 +43,8 @@
             const wordCount = this.editor.getContentLength(true)
             const content = this.editor.getContent()
             const plainTxt = this.editor.getPlainTxt()
-            this.$emit('input', { wordCount: wordCount, content: content, plainTxt: plainTxt })
+//            this.$emit('input', { wordCount: wordCount, content: content, plainTxt: plainTxt })
+            this.$emit('input', content)
           }.bind(this))
 
           this.$emit('ready', this.editor)
