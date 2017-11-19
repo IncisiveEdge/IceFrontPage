@@ -9,55 +9,66 @@
 }
 </style>
 <template>
-  <Form ref="newsEdit" :rules="rules" :model="item" :label-width="80">
-    <FormItem label="标题" prop="title">
-      <Input v-model="item.title"></Input>
-    </FormItem>
+  <div>
+    <Form ref="newsEdit" :rules="rules" :model="item" :label-width="80">
+      <FormItem label="标题" prop="title">
+        <Input v-model="item.title"></Input>
+      </FormItem>
 
-    <FormItem label="摘要" prop="newsabstract">
-      <Input v-model="item.newsabstract" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
-    </FormItem>
+      <FormItem label="摘要" prop="newsabstract">
+        <Input v-model="item.newsabstract" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+      </FormItem>
 
-    <FormItem label="标题图片">
-      <i-upload :config="upload"></i-upload>
-    </FormItem>
+      <FormItem label="标题图片">
+        <i-upload :config="upload"></i-upload>
+      </FormItem>
 
-    <FormItem label="预览" v-if="item.newspic">
-      <div class="img-preview-container">
-        <i-image :img-url="imgUrl"></i-image>
-      </div>
-    </FormItem>
+      <!--<FormItem label="预览" v-if="item.newspic">-->
+      <!--<div class="img-preview-container">-->
+      <!--<i-image :img-url="imgUrl"></i-image>-->
+      <!--</div>-->
+      <!--</FormItem>-->
 
 
-    <FormItem label="内容编辑">
-      <i-editor :value="item.content" @input="contentChanged"></i-editor>
-    </FormItem>
+      <FormItem label="内容编辑">
+        <i-editor :value="item.content" @input="contentChanged"></i-editor>
+      </FormItem>
 
-  </Form>
+    </Form>
+    <image-viewer ref="viewer"></image-viewer>
+  </div>
 </template>
 
 <script>
+  import ie from '@/assets/ie/ie'
   import IUpload from '../Upload/Upload'
   import IEditor from '../Editor'
   import IImage from '../../partical/Image/ImageResize'
+  import ImageViewer from '@/components/partical/ImageViewer'
   export default {
     name: '',
     props: {
       item: {
         type: Object,
         default () {
-          return {}
+          return {
+            content: ''
+          }
         }
       }
     },
     components: {
       IUpload,
       IEditor,
-      IImage
+      IImage,
+      ImageViewer
     },
     methods: {
       contentChanged (content) {
         this.item.content = content
+      },
+      clear () {
+        this.upload.defaultFiles = []
       }
     },
     computed: {
@@ -84,6 +95,17 @@
           accept: 'image/*',
           maxSize: 500,
           format: ['png', 'jpeg', 'gif', 'jpg'],
+          defaultFiles: (() => {
+            if (this.item.newspic) {
+              console.log(this.item.newspic)
+              let picName = this.item.newspic.split('/')
+              picName = picName[picName.length - 1]
+              return [{
+                name: picName,
+                url: this.item.newspic
+              }]
+            }
+          })(),
           before: () => {
             if (this.item.newspic) {
               this.$Message.warning('上传文件已存在，如需重新上传请先移除')
@@ -99,6 +121,14 @@
           remove: (file, fileList) => {
             this.item.newspic = ''
             this.$Message.success(file.name + ' 已移除')
+          },
+          preview: (file) => {
+            const url = file.url || (file.response && file.response.url)
+            if (!url) {
+              this.$Message.warning('文件地址错误，请查询')
+              return
+            }
+            url && this.$refs.viewer.show(ie.url(url))
           }
         }
       }

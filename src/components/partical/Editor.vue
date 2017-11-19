@@ -25,9 +25,10 @@
     watch: {
       value: function value(val, oldVal) {
         this.editor = UE.getEditor(this.id, this.config)
-        if (val !== null) {
-          this.editor.setContent(val)
-        }
+        val = val || ''
+//        if (val !== null) {
+        this.editor.setContent(val)
+//        }
       },
     },
     mounted() {
@@ -37,7 +38,7 @@
         this.editor = UE.getEditor(this.id, this.config)
 
         this.editor.ready(function f2() {
-          this.editor.setContent(this.value)
+          this.editor.setContent(this.value || '')
 
           this.editor.addListener("contentChange", function () {
             const wordCount = this.editor.getContentLength(true)

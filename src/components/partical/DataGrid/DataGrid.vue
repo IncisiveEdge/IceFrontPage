@@ -25,7 +25,7 @@
     </div>
     <ie-btn :model="config.ieBtn"></ie-btn>
     <Table height="200" ref="dataGrid" :highlight-row="config.selectedMode === 'single'" @on-current-change="onSelectedRow" @on-selection-change="onSelectedRow" :loading="config.loading" :border="true" :stripe="true" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="data" :columns="template"></Table>
-    <div v-if="config.pagination.total" style="margin-top: 20px;overflow: hidden">
+    <div v-if="config.doPagination && config.pagination.total && config.pagination.total > config.perPage" style="margin-top: 20px;overflow: hidden">
       <div style="float: right">
         <Page show-total show-sizer show-elevator :total="config.pagination.total" :current="config.pagination.currentPage" :page-size="config.pagination.perPage" :page-size-opts="config.pagination.sizeOptions" @on-change="onChange" @on-page-size-change="onSizeChange"></Page>
       </div>
@@ -97,7 +97,11 @@
     },
     computed: {
       data () {
-        if (this.rows && !this.config.pagination.async) {
+        if (!this.rows) return []
+        if (!this.config.doPagination) {
+          return this.rows
+        }
+        if (this.config.doPagination && !this.config.pagination.async) {
           return this.rows.filter((item, index) => {
             const min = Math.max((this.config.pagination.currentPage - 1) * this.config.pagination.perPage + 1, 1)
             const max = Math.min(this.config.pagination.currentPage * this.config.pagination.perPage, this.rows.length)

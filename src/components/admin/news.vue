@@ -3,7 +3,7 @@
     <ie-list :rows="ieList.listData" :columns="ieList.tplData" :config="ieList.globalConfig"></ie-list>
     <i-modal :modal="modal">
       <div slot="content">
-        <news-edit v-if="modalType === 'edit'" :item="item"></news-edit>
+        <news-edit ref="newsEdit" v-if="modalType === 'edit'" :item="item"></news-edit>
       </div>
     </i-modal>
     <image-viewer ref="viewer"></image-viewer>
@@ -51,6 +51,7 @@
       this.ieList.addBtn(['查看', 'view', 'eye', 'info'])
       this.ieList.addBtn(['编辑', 'edit', 'edit', 'success'])
       this.ieList.addBtn(['删除', 'del', 'trash-a', 'error'])
+      this.ieList.setPagination(false)
       this.ieList.render({api: '/getnewstbtitle.do'}, {api: '/getnewstitlelist.do'}).done(() => {
       })
     },
@@ -63,14 +64,18 @@
         this.modal.textOk = '新增'
         this.modal.onOk = () => {
           if (this.item) {
-            resta.post('/insertnewsinfo.do', this.item).done(res => {
+            resta.post('/insertnewsinfo.do', this.item, true).done(res => {
               console.warn(res)
             })
           }
           this.modal.model = false
         }
         this.modal.onCancel = () => {
+          this.item = {}
+//          this.$refs.newsEdit.clear()
           this.modal.model = false
+          // 组件重新加载hack
+          this.modalType = 'close'
         }
       },
       view () {
@@ -95,14 +100,17 @@
         this.modal.textOk = '保存'
         this.modal.onOk = () => {
           if (this.item) {
-            resta.post('/insertnewsinfo.do', this.item).done(res => {
+            resta.post('/updatenewsinfo.do', this.item, true).done(res => {
               console.warn(res)
             })
           }
           this.modal.model = false
         }
         this.modal.onCancel = () => {
+          this.item = {}
           this.modal.model = false
+          // 组件重新加载hack
+          this.modalType = 'close'
         }
       },
       del () {

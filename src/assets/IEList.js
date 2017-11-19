@@ -25,6 +25,7 @@ class IEListObject {
       height: undefined,
       customizeElements: [],
       ieBtn: new IEButtonObject(_vm),
+      doPagination: true,
       pagination: {
         total: 0,
         currentPage: 1,
@@ -124,7 +125,7 @@ class IEListObject {
   fillData (data) {
     this.listData = []
     data.forEach((item, index) => {
-      this.listData.push(item)
+      this.listData.unshift(item)
     })
   }
 
@@ -146,6 +147,10 @@ class IEListObject {
 
   getSelectedMode () {
     return this.globalConfig.selectedMode
+  }
+
+  setPagination (bool) {
+    this.globalConfig.doPagination = bool !== false
   }
 
   setItemsPerPage (counts) {
