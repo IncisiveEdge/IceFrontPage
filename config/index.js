@@ -38,7 +38,7 @@ module.exports = {
     // },
     proxyTable: {
       '/api': {
-        target: 'http://115.28.67.79:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/ICEManage'
