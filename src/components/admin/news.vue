@@ -64,6 +64,7 @@
         this.modal.textOk = '新增'
         this.modal.onOk = () => {
           if (this.item) {
+            console.warn('aaaaaaa', this.item)
             resta.post('/insertnewsinfo.do', this.item, true).done(res => {
               console.warn(res)
             })

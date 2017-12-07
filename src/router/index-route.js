@@ -5,6 +5,7 @@ import Logout from '../components/index/Logout'
 import User from '../components/index/User'
 import News from '../components/index/News'
 import Products from '../components/index/Products'
+import debug from '../Debug'
 import Blank from '../blank'
 import NotFound from '../404'
 
@@ -41,6 +42,10 @@ export default [
     path: '/blank',
     name: 'blank',
     component: Blank
+  }, {
+    path: '/debug',
+    name: 'debug',
+    component: debug
   }, {
     path: '*',
     name: 'pageNotFound',
